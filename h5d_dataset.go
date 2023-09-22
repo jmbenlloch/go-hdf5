@@ -7,6 +7,11 @@ package hdf5
 // #include "hdf5.h"
 // #include <stdlib.h>
 // #include <string.h>
+// void testFn(int * data){
+//	for (int i=0; i<10;i++){
+//		printf("data[i]: %d \t0x%016x\n", data[i], data[i]);
+//	}
+//}
 import "C"
 
 import (
@@ -116,15 +121,18 @@ func (s *Dataset) WriteSubset(data interface{}, memspace, filespace *Dataspace) 
 
 	addr := unsafe.Pointer(nil)
 	v := reflect.Indirect(reflect.ValueOf(data))
+	fmt.Println(addr, v, data)
 
 	switch v.Kind() {
 
 	case reflect.Array:
 		addr = unsafe.Pointer(v.UnsafeAddr())
+		fmt.Println(addr, v, data)
 
 	case reflect.Slice:
 		slice := (*reflect.SliceHeader)(unsafe.Pointer(v.UnsafeAddr()))
 		addr = unsafe.Pointer(slice.Data)
+		fmt.Println(addr, v, data)
 
 	case reflect.String:
 		str := (*reflect.StringHeader)(unsafe.Pointer(v.UnsafeAddr()))
@@ -144,6 +152,9 @@ func (s *Dataset) WriteSubset(data interface{}, memspace, filespace *Dataspace) 
 	if filespace != nil {
 		filespace_id = filespace.id
 	}
+
+	C.testFn((*C.int)(addr))
+
 	rc := C.H5Dwrite(s.id, dtype.id, memspace_id, filespace_id, 0, addr)
 	err = h5err(rc)
 	return err
