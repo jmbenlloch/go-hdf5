@@ -32,6 +32,7 @@ func (h h5error) Error() string {
 
 func h5err(herr C.herr_t) error {
 	if herr < 0 {
+		C.H5Eprint1(C.stdout)
 		return h5error{code: int(herr)}
 	}
 	return nil
@@ -39,6 +40,7 @@ func h5err(herr C.herr_t) error {
 
 func checkID(hid C.hid_t) error {
 	if hid < 0 {
+		C.H5Eprint1(C.stdout)
 		return h5error{code: int(hid)}
 	}
 	return nil
