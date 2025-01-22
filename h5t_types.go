@@ -12,6 +12,7 @@ import "C"
 import (
 	"fmt"
 	"reflect"
+	"strings"
 	"unsafe"
 )
 
@@ -449,7 +450,13 @@ func NewDataTypeFromType(t reflect.Type) (*Datatype, error) {
 		for i := 0; i < n; i++ {
 			f := t.Field(i)
 			var field_dt *Datatype
-			field_dt, err = NewDataTypeFromType(f.Type)
+			// Strings are defined using a [N]byte in the struct and adding 'Str' to the field name.
+			if strings.HasSuffix(f.Name, "Str") {
+				field_dt, err = NewDatatypeFromValue("")
+			} else {
+				field_dt, err = NewDataTypeFromType(f.Type)
+			}
+
 			if err != nil {
 				return nil, err
 			}

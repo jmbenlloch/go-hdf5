@@ -258,11 +258,12 @@ var (
 	T_NATIVE_INT64  *Datatype = NewDatatype(C._H5T_NATIVE_INT64())
 	T_NATIVE_UINT64 *Datatype = NewDatatype(C._H5T_NATIVE_UINT64())
 
-	T_GO_STRING *Datatype = makeGoStringDatatype()
+	//T_GO_STRING *Datatype = makeGoStringDatatype()
+	T_GO_STRING *Datatype = makeGoFixedLengthStringDatatype(STRLEN)
 )
 
-//
 var h5t_VARIABLE = int(C.size_t_H5T_VARIABLE())
+var STRLEN = 20
 
 func makeGoStringDatatype() *Datatype {
 	dt, err := T_C_S1.Copy()
@@ -270,6 +271,24 @@ func makeGoStringDatatype() *Datatype {
 		panic(err)
 	}
 	err = dt.SetSize(h5t_VARIABLE)
+	if err != nil {
+		panic(err)
+	}
+	dt.goPtrPathLen = 1 // This is the first field of the string header.
+	return dt
+}
+
+func SetStringLength(size int) {
+	STRLEN = size
+	T_GO_STRING.SetSize(size)
+}
+
+func makeGoFixedLengthStringDatatype(size int) *Datatype {
+	dt, err := T_C_S1.Copy()
+	if err != nil {
+		panic(err)
+	}
+	err = dt.SetSize(size)
 	if err != nil {
 		panic(err)
 	}
