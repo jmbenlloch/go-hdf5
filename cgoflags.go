@@ -4,7 +4,7 @@
 
 package hdf5
 
-// #cgo LDFLAGS: -lhdf5 -lhdf5_hl
+// #cgo LDFLAGS: -lhdf5 -lhdf5_hl -lblosc_filter -lpthread
 // #cgo darwin CFLAGS: -I/usr/local/include
 // #cgo darwin LDFLAGS: -L/usr/local/lib
 // #cgo linux,!arm64 CFLAGS: -I/usr/local/include, -I/usr/lib/x86_64-linux-gnu/hdf5/serial/include
