@@ -1,3 +1,5 @@
-module github.com/jmbenlloch/go-hdf5
+module github.com/next-exp/hdf5-go
 
 go 1.13
+
+require gonum.org/v1/hdf5 v0.0.0-20210714002203-8c5d23bc6946
