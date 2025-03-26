@@ -196,10 +196,10 @@ func (s *Dataset) Resize(dims []uint) error {
 	if dims == nil {
 		return fmt.Errorf("dims are nil")
 	}
-	rank := s.Space().SimpleExtentNDims()
-	if rank != len(dims) {
-		return fmt.Errorf("Resize can't change the rank of the dataset space")
-	}
+	//rank := s.Space().SimpleExtentNDims()
+	//if rank != len(dims) {
+	//	return fmt.Errorf("Resize can't change the rank of the dataset space")
+	//}
 	c_dims = (*C.hsize_t)(unsafe.Pointer(&dims[0]))
 
 	rc := C.H5Dset_extent(s.id, c_dims)
