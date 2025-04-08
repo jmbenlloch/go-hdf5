@@ -10,6 +10,7 @@ package hdf5
 import "C"
 
 import (
+	"errors"
 	"fmt"
 
 	"reflect"
@@ -42,7 +43,9 @@ func createDataset(id C.hid_t, name string, dtype *Datatype, dspace *Dataspace, 
 
 // Close releases and terminates access to a dataset.
 func (s *Dataset) Close() error {
-	return s.closeWith(h5dclose)
+	err1 := s.typ.Close()
+	err2 := s.closeWith(h5dclose)
+	return errors.Join(err1, err2)
 }
 
 func h5dclose(id C.hid_t) C.herr_t {

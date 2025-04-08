@@ -475,6 +475,10 @@ func NewDataTypeFromType(t reflect.Type) (*Datatype, error) {
 			if err != nil {
 				return nil, fmt.Errorf("pb with field [%d-%s]: %s", i, f.Name, err)
 			}
+			err = field_dt.Close()
+			if err != nil {
+				return nil, fmt.Errorf("pb with field [%d-%s]: %s", i, f.Name, err)
+			}
 		}
 		dt = &cdt.Datatype
 		dt.goPtrPathLen += ptrPathLen
